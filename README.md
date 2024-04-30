@@ -3,7 +3,7 @@
 ## Overview
 This repository contains the implementation of a GPT-like transformer model built using PyTorch. It's designed to handle a variety of natural language processing tasks, with a focus on both flexibility and performance.
 
-![Transformer Architecture](/gpt_transformer/docs/04__image029.png)
+![Transformer Architecture](./docs/04__image029.png)
 
 *Figure: Simplified diagram of the Transformer architecture.*
 
