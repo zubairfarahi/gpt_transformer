@@ -4,7 +4,23 @@ from utils import get_tokenizer, generate_text_simple, token_ids_to_text, text_t
 from config import load_config
 import argparse
 from train import train_model_simple
+import matplotlib.pyplot as plt
 
+
+
+def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses):
+    fig, ax1 = plt.subplots(figsize=(5, 3))
+    ax1.plot(epochs_seen, train_losses, label="Training loss")
+    ax1.plot(epochs_seen, val_losses, linestyle="-.", label="Validation loss")
+    ax1.set_xlabel("Epochs")
+    ax1.set_ylabel("Loss")
+    ax1.legend(loc="upper right")
+    ax2 = ax1.twiny()
+    ax2.plot(tokens_seen, train_losses, alpha=0)
+    ax2.set_xlabel("Tokens seen")
+    fig.tight_layout()
+    plt.savefig("losses.png")
+    plt.show()
 
 
 def train(args):
@@ -60,6 +76,9 @@ def train(args):
         model, train_loader, val_loader, optimizer, device, num_epochs,
         eval_freq=5, eval_iter=1, start_context="Every effort moves you"
     )
+    
+    epochs_tensor = torch.linspace(0, num_epochs, len(train_losses))
+    plot_losses(epochs_tensor, track_tokens_seen, train_losses, val_losses)
 
 def main(args):
     GPT_CONFIG_124M = load_config(args.config_file)
