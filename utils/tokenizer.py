@@ -7,14 +7,17 @@ def get_tokenizer(model_name):
     return tiktoken.get_encoding(model_name)
 
 # Function to encode text
-def encode_text(tokenizer, text):
-
-    return torch.tensor(tokenizer.encode(text))
+def text_to_token_ids(tokenizer, text):
+    encoded = tokenizer.encode(text, allowed_special={'<|endoftext|>'})
+    encoded_tensor = torch.tensor(encoded).unsqueeze(0) # add batch dimension
+    return encoded_tensor
+    # return torch.tensor(tokenizer.encode(text))
 
 # Function to decode tokens into text
-def decode_tokens(tokenizer, tokens):
-
-    return tokenizer.decode(tokens)
+def token_ids_to_text(tokenizer, token_ids):
+    flat = token_ids.squeeze(0) # remove batch dimension
+    return tokenizer.decode(flat.tolist())
+    # return tokenizer.decode(tokens)
 
 
 def generate_text_simple(model, idx, max_new_tokens, context_size):

@@ -1,6 +1,6 @@
 import torch
 from models import GPTModel
-from utils import get_tokenizer, generate_text_simple, decode_tokens
+from utils import get_tokenizer, generate_text_simple, token_ids_to_text, text_to_token_ids
 from config import load_config
 import argparse
 
@@ -34,23 +34,23 @@ def main(args):
     print(f"Total size of the model: {total_size_mb:.2f} MB")
     
     tokenizer = get_tokenizer("gpt2")
-    start_context = "Hello, I am"
-    encoded = tokenizer.encode(start_context)
-    print("encoded:", encoded)
-    encoded_tensor = torch.tensor(encoded).unsqueeze(0)
-    print("encoded_tensor.shape:", encoded_tensor.shape)
+    start_context = "Every effort moves you"
+    # encoded = tokenizer.encode(start_context)
+    # print("encoded:", encoded)
+    # encoded_tensor = torch.tensor(encoded).unsqueeze(0)
+    # print("encoded_tensor.shape:", encoded_tensor.shape)
 
     model.eval()
     out = generate_text_simple(
         model=model,
-        idx=encoded_tensor, 
-        max_new_tokens=6, 
+        idx=text_to_token_ids(tokenizer, start_context), 
+        max_new_tokens=10, 
         context_size=GPT_CONFIG_124M["context_length"]
     )
     print("Output:", out)
     print("Output length:", len(out[0]))
 
-    decoded_text = decode_tokens(tokenizer, out.squeeze(0).tolist())
+    decoded_text = token_ids_to_text(tokenizer, out)
     print(decoded_text)
     
 
