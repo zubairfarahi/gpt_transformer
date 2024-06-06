@@ -5,8 +5,8 @@ from config import load_config
 import argparse
 from train import train_model_simple
 import matplotlib.pyplot as plt
-
-
+from gpt_download import download_and_load_gpt2
+settings, params = download_and_load_gpt2("124M", "gpt2")
 
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses):
     fig, ax1 = plt.subplots(figsize=(5, 3))
@@ -136,4 +136,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run GPT model with custom config")
     parser.add_argument('--config_file', type=str, help='Path to the configuration INI file', required=True)
     args = parser.parse_args()
-    train(args)
+    main(args)
+    # train(args)
